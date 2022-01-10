@@ -1,18 +1,25 @@
 import speech_recognition
 import os
 import random
+import pyttsx3
 import wave
 import json
 
-sr = speech_recognition.Recognizer()
 
+"""
+Это голосовой помощник по имени Моника!(почему именно Моника не скажу)
+"""
+sr = speech_recognition.Recognizer()
+#пауза между произнесенными словами
 sr.pause_threshold = 0.5
+#словарь, где указаны команды в еще одном словаре, где указаны слова-триггеры, которые вызывают определенные команды(фух)
+
 
 commands = {
     'commands': {
         'hi': ['привет', 'приветствую'],
-        'create_task':['моника добавь задачу', 'моника создай задачу'],
-        'play_music': ['моника включи музыку']
+        'create_task':['добавь задачу', 'создай задачу'],
+        'play_music': ['включи музыку']
     }
 }
 
@@ -21,13 +28,11 @@ def listen():
         with speech_recognition.Microphone() as mic:
             sr.adjust_for_ambient_noise(source=mic, duration=0.5)
             audio = sr.listen(source=mic)
-            try:
-                query = sr.recognize_google(audio_data=audio, language='ru-RU').lower()
-            except:
-                print('Проблемы с сетью...')
+            query = sr.recognize_google(audio_data=audio, language='ru-RU').lower()
         return query
     except:
         print('Я тебя не понимаю...')
+
 
 def hi():
     return 'Привет солнышко :З'
@@ -49,7 +54,6 @@ def create_task():
 
 def main():
     query = listen()
-
     for i, j in commands['commands'].items():
         if query in j:
             print(globals()[i]())
